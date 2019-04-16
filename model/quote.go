@@ -1,7 +1,10 @@
 package model
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 // Quote struct
 type Quote struct {
-	Text string `json:"Text"`
-	Name string `json:"Name"`
+	ID   primitive.ObjectID `bson:"_id" json:"-"`
+	Name string             `bson:"Name" json:"Name"`
+	Text string             `bson:"Text" json:"Text"`
 }
