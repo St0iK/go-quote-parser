@@ -3,12 +3,12 @@ package parser
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
-
 	"github.com/St0iK/go-quote-parser/dao"
 	"github.com/St0iK/go-quote-parser/model"
+	"io/ioutil"
+	"os"
 )
+
 //The first implementation.
 type JsonV1Parser struct {
 	filename string
@@ -16,7 +16,7 @@ type JsonV1Parser struct {
 
 func (jv1p *JsonV1Parser) Process(filename string) (string, error) {
 	
-	jsonFile, err := os.Open("quotes/quotes_v1.json")
+	file, err := os.Open(filename)
 
 	// if we os.Open returns an error then handle it
 	if err != nil {
@@ -24,23 +24,22 @@ func (jv1p *JsonV1Parser) Process(filename string) (string, error) {
 	}
 
 	// defer the closing of our jsonFile so that we can parse it later on
-	defer jsonFile.Close()
+	defer file.Close()
 
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(file)
 
-	var quotes []model.Quote
+	var quotes []model.QuoteV1
 
 	err = json.Unmarshal(byteValue, &quotes)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(len(quotes))
-
 	for i := 0; i < len(quotes); i++ {
 		fmt.Printf("%+v\n", quotes[i])
-		dao.Insert(quotes[i])
-		fmt.Println("\nName: " + quotes[i].Name)
+		dao.InsertV1(quotes[i])
+		fmt.Println("\nName: " + quotes[i].Author)
+		fmt.Println("TTTT: " + quotes[i].Quote)
 
 	}
 	return "yay",nil
@@ -49,6 +48,6 @@ func (jv1p *JsonV1Parser) Process(filename string) (string, error) {
 func NewJsonV1Factory(conf map[string]string) (Parser, error) {
 
 	return &JsonV1Parser{
-		"something",
+		conf["FILENAME"],
 	}, nil
 }

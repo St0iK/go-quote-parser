@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"strings"
+	"path/filepath"
 )
 
 // ParserFactory ...
@@ -26,20 +26,14 @@ func Register(name string, factory ParserFactory) {
 
 func CreateParser(conf map[string]string) (Parser, error) {
 
-	// Query configuration for datastore defaulting to "memory".
-	engineName := conf["PARSER_NAME"]
+	parserName := filepath.Base(conf["FILENAME"])
 
-	engineFactory, ok := parserFactories[engineName]
+	parserFactory, ok := parserFactories[parserName]
 	if !ok {
-		// Factory has not been registered.
-		// Make a list of all available datastore factories for logging.
-		availableDatastores := make([]string, len(parserFactories))
-		for k, _ := range parserFactories {
-			availableDatastores = append(availableDatastores, k)
-		}
-		return nil, errors.New(fmt.Sprintf("Invalid Datastore name. Must be one of: %s", strings.Join(availableDatastores, ", ")))
+
+		return nil, errors.New(fmt.Sprintf("Invalid Datastore name. Must be one of"))
 	}
 
 	// Run the factory with the configuration.
-	return engineFactory(conf)
+	return parserFactory(conf)
 }

@@ -52,11 +52,24 @@ func Connect() {
 }
 
 // Insert a movie into database
-func Insert(quote model.Quote) error {
+func InsertV1(quote model.QuoteV1) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	res, err := collection.InsertOne(ctx, bson.M{
-		"name": quote.Name,
-		"text": quote.Text,
+		"author": quote.Author,
+		"quote": quote.Quote,
+	})
+
+	id := res.InsertedID
+	fmt.Println(id)
+	return err
+}
+
+// Insert a movie into database
+func InsertV2(quote model.QuoteV2) error {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	res, err := collection.InsertOne(ctx, bson.M{
+		"author": quote.Author,
+		"quote": quote.Quote,
 	})
 
 	id := res.InsertedID
