@@ -9,14 +9,13 @@ import (
 	"os"
 )
 
-// basic V1 Json parser struct
-type JsonV1Parser struct {
+// basic V3 Json parser struct
+type JsonV3Parser struct {
 	conf map[string]string
 }
 
 // Process
-func (jv1p *JsonV1Parser) Process(conf map[string]string) (string, error) {
-
+func (pds *JsonV3Parser) Process(conf map[string]string) (string, error) {
 	file, err := os.Open(conf["FILENAME"])
 
 	// if we os.Open returns an error then handle it
@@ -29,7 +28,7 @@ func (jv1p *JsonV1Parser) Process(conf map[string]string) (string, error) {
 
 	byteValue, _ := ioutil.ReadAll(file)
 
-	var quotes []model.QuoteV1
+	var quotes []model.QuoteV3
 
 	err = json.Unmarshal(byteValue, &quotes)
 	if err != nil {
@@ -37,16 +36,16 @@ func (jv1p *JsonV1Parser) Process(conf map[string]string) (string, error) {
 	}
 
 	// loop through all the quotes found in the file
-	// and insert them into the data
+	// and insert them into the database
 	for i := 0; i < len(quotes); i++ {
-		dao.InsertV1(quotes[i])
+		dao.InsertV3(quotes[i])
 	}
 	return "yay",nil
 }
 
-func NewJsonV1Factory(conf map[string]string) (Parser, error) {
+func NewJsonV3Factory(conf map[string]string) (Parser, error) {
 
-	return &JsonV1Parser{
+	return &JsonV3Parser{
 		conf,
 	}, nil
 }

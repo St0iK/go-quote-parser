@@ -9,13 +9,14 @@ import (
 	"os"
 )
 
-//The second implementation.
+// basic V2 Json parser struct
 type JsonV2Parser struct {
-	filename string
+	conf map[string]string
 }
 
-func (pds *JsonV2Parser) Process(filename string) (string, error) {
-	file, err := os.Open(filename)
+// Process
+func (pds *JsonV2Parser) Process(conf map[string]string) (string, error) {
+	file, err := os.Open(conf["FILENAME"])
 
 	// if we os.Open returns an error then handle it
 	if err != nil {
@@ -34,11 +35,10 @@ func (pds *JsonV2Parser) Process(filename string) (string, error) {
 		fmt.Println(err)
 	}
 
+	// loop through all the quotes found in the file
+	// and insert them into the database
 	for i := 0; i < len(quotes); i++ {
-		fmt.Printf("%+v\n", quotes[i])
 		dao.InsertV2(quotes[i])
-		fmt.Println("\nName: " + quotes[i].Author)
-
 	}
 	return "yay",nil
 }
@@ -46,6 +46,6 @@ func (pds *JsonV2Parser) Process(filename string) (string, error) {
 func NewJsonV2Factory(conf map[string]string) (Parser, error) {
 
 	return &JsonV2Parser{
-		conf["FILENAME"],
+		conf,
 	}, nil
 }

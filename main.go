@@ -8,48 +8,54 @@ import (
 	"log"
 )
 
-func init() {
-	dao.Connect()
-}
 
 func init() {
-	parser.Register("quotes_v1.json", parser.NewJsonV1Factory)
-	parser.Register("quotes_v2.json", parser.NewJsonV2Factory)
+	// Connect to the database
+	dao.Connect()
+
+	// register the parser factories
+	parser.Register("quotes_v1.json", parser.NewJsonFactory)
+	//parser.Register("quotes_v1.json", parser.NewJsonV1Factory)
+	//parser.Register("quotes_v2.json", parser.NewJsonV2Factory)
+	//parser.Register("quotes_v3.json", parser.NewJsonV3Factory)
 }
 
 func main() {
-	// Create a list of the files to be parsed
+
+	var configuration = map[string]map[string]string{}
+	configuration["quotes_v1.json"] = map[string]string{
+		"FILENAME":"quotes_v1.json",
+		"Author":"Name",
+		"QuoteText":"Text",
+	}
+
+	configuration["quotes_v2.json"] = map[string]string{
+		"FILENAME":"quotes_v2.json",
+		"Author":"quoteAuthor",
+		"QuoteText":"quoteText",
+	}
+
+
+	// folder containing the quotes files
 	quotesFolder := "./quotes"
 	files, err := ioutil.ReadDir(quotesFolder)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// loop through the files in the folder
 	for _, f := range files {
+		// build filename
 		file := quotesFolder + "/" + f.Name()
-		parser, _ := parser.CreateParser(map[string]string{
+
+		// crate a parser and pass the filename
+		parser, _ := parser.GetParserForFile(map[string]string{
 			"FILENAME": file,
 		})
+		// If parser was found for this file, then process it
 		if parser != nil {
-			var res, _ = parser.Process(file)
+			var res, _ = parser.Process(configuration[file])
 			fmt.Println(res)
 		}
 	}
-
-
-
-
-
-
-	// Loop through all of them
-	// spawn go-routine to process the items
-	// Wait all routines to finish and processing the items
-	//fmt.Println("Initialising parsing...")
-	//
-	//parser, _ := parser.CreateParser(map[string]string{
-	//	"PARSER_NAME": "json-v1",
-	//	"FILENAME": "quotes_v1.json",
-	//})
-	//var res, _ = parser.Process("sdfsdfsdf")
-	//fmt.Println(res)
 }

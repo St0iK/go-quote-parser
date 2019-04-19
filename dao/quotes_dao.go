@@ -33,6 +33,7 @@ const (
 func Connect() {
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_DB_URL")))
 
 	if err != nil {
@@ -51,6 +52,16 @@ func Connect() {
 
 }
 
+
+func Insert(quote model.Quote) error {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	_, err := collection.InsertOne(ctx, bson.M{
+		"author": quote.Author,
+		"quote":  quote.QuoteText,
+	})
+
+	return err
+}
 // Insert a movie into database
 func InsertV1(quote model.QuoteV1) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)

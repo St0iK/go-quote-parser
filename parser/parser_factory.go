@@ -12,7 +12,7 @@ type ParserFactory func(conf map[string]string) (Parser, error)
 
 var parserFactories = make(map[string]ParserFactory)
 
-// Register ...
+// Register a new Parser Factory to the list of factories
 func Register(name string, factory ParserFactory) {
 	if factory == nil {
 		log.Panicf("Parser factory %s does not exist.", name)
@@ -21,10 +21,12 @@ func Register(name string, factory ParserFactory) {
 	if registered {
 		log.Panicf("Datastore factory %s already registered. Ignoring.", name)
 	}
+	// add factory to the list
 	parserFactories[name] = factory
 }
 
-func CreateParser(conf map[string]string) (Parser, error) {
+// Get the parser to process the file, and pass configuration
+func GetParserForFile(conf map[string]string) (Parser, error) {
 
 	parserName := filepath.Base(conf["FILENAME"])
 
