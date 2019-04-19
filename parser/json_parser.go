@@ -42,7 +42,7 @@ func (jp *JsonParser) Process(conf map[string]string) (string, error) {
 
 	for key, result := range results {
 		fmt.Println("Reading Value for Key :", key)
-		fmt.Println("Inserting Quote from :", result["Name"])
+		fmt.Println("Inserting Quote from :", result[conf["Author"]])
 		quote := model.Quote{
 			Author: fmt.Sprint(result[conf["Author"]]),
 			QuoteText: fmt.Sprint(result[conf["QuoteText"]]),

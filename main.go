@@ -15,29 +15,36 @@ func init() {
 
 	// register the parser factories
 	parser.Register("quotes_v1.json", parser.NewJsonFactory)
-	//parser.Register("quotes_v1.json", parser.NewJsonV1Factory)
-	//parser.Register("quotes_v2.json", parser.NewJsonV2Factory)
-	//parser.Register("quotes_v3.json", parser.NewJsonV3Factory)
+	parser.Register("quotes_v2.json", parser.NewJsonFactory)
+	parser.Register("quotes_v3.json", parser.NewJsonFactory)
 }
 
 func main() {
 
+	// folder containing the quotes files
+	quotesFolder := "./quotes"
+
 	var configuration = map[string]map[string]string{}
 	configuration["quotes_v1.json"] = map[string]string{
-		"FILENAME":"quotes_v1.json",
+		"FILENAME": quotesFolder + "/quotes_v1.json",
 		"Author":"Name",
 		"QuoteText":"Text",
 	}
 
 	configuration["quotes_v2.json"] = map[string]string{
-		"FILENAME":"quotes_v2.json",
+		"FILENAME": quotesFolder + "/quotes_v2.json",
 		"Author":"quoteAuthor",
 		"QuoteText":"quoteText",
 	}
 
+	configuration["quotes_v3.json"] = map[string]string{
+		"FILENAME": quotesFolder + "/quotes_v3.json",
+		"Author":"author",
+		"QuoteText":"en",
+	}
 
-	// folder containing the quotes files
-	quotesFolder := "./quotes"
+
+
 	files, err := ioutil.ReadDir(quotesFolder)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +61,7 @@ func main() {
 		})
 		// If parser was found for this file, then process it
 		if parser != nil {
-			var res, _ = parser.Process(configuration[file])
+			var res, _ = parser.Process(configuration[f.Name()])
 			fmt.Println(res)
 		}
 	}
