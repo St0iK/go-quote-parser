@@ -2,7 +2,6 @@ package dao
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -15,17 +14,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-// client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_DB_URL")))
-// ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-// err = client.Connect(ctx)
-// collection := client.Database("testing").Collection("quotes")
-
 var collection *mongo.Collection
 
 const (
-	// DBNAME ...
-	DBNAME = "quotes-parser"
-	// COLLECTION ...
+	DBNAME     = "quotes-parser"
 	COLLECTION = "quotes"
 )
 
@@ -52,7 +44,6 @@ func Connect() {
 
 }
 
-
 func Insert(quote model.Quote) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := collection.InsertOne(ctx, bson.M{
@@ -60,30 +51,5 @@ func Insert(quote model.Quote) error {
 		"quote":  quote.QuoteText,
 	})
 
-	return err
-}
-// Insert a movie into database
-func InsertV1(quote model.QuoteV1) error {
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	res, err := collection.InsertOne(ctx, bson.M{
-		"author": quote.Author,
-		"quote": quote.Quote,
-	})
-
-	id := res.InsertedID
-	fmt.Println(id)
-	return err
-}
-
-// Insert a movie into database
-func InsertV2(quote model.QuoteV2) error {
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	res, err := collection.InsertOne(ctx, bson.M{
-		"author": quote.Author,
-		"quote": quote.Quote,
-	})
-
-	id := res.InsertedID
-	fmt.Println(id)
 	return err
 }

@@ -8,7 +8,6 @@ import (
 	"log"
 )
 
-
 func init() {
 	// Connect to the database
 	dao.Connect()
@@ -21,29 +20,31 @@ func init() {
 
 func main() {
 
+	// TODO:
+	//  1. move configuration into a file
+	//  2. optimise factory
+
 	// folder containing the quotes files
 	quotesFolder := "./quotes"
 
 	var configuration = map[string]map[string]string{}
 	configuration["quotes_v1.json"] = map[string]string{
-		"FILENAME": quotesFolder + "/quotes_v1.json",
-		"Author":"Name",
-		"QuoteText":"Text",
+		"FILENAME":  quotesFolder + "/quotes_v1.json",
+		"Author":    "Name",
+		"QuoteText": "Text",
 	}
 
 	configuration["quotes_v2.json"] = map[string]string{
-		"FILENAME": quotesFolder + "/quotes_v2.json",
-		"Author":"quoteAuthor",
-		"QuoteText":"quoteText",
+		"FILENAME":  quotesFolder + "/quotes_v2.json",
+		"Author":    "quoteAuthor",
+		"QuoteText": "quoteText",
 	}
 
 	configuration["quotes_v3.json"] = map[string]string{
-		"FILENAME": quotesFolder + "/quotes_v3.json",
-		"Author":"author",
-		"QuoteText":"en",
+		"FILENAME":  quotesFolder + "/quotes_v3.json",
+		"Author":    "author",
+		"QuoteText": "en",
 	}
-
-
 
 	files, err := ioutil.ReadDir(quotesFolder)
 	if err != nil {
