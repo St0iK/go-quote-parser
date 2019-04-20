@@ -43,14 +43,18 @@ func (jp *JsonParser) Process(conf map[string]string) (string, error) {
 	for key, result := range results {
 		fmt.Println("Reading Value for Key :", key)
 		fmt.Println("Inserting Quote from :", result[conf["Author"]])
+		fmt.Println("Inserting Quote in category :", result[conf["Category"]])
 		quote := model.Quote{
 			Author: fmt.Sprint(result[conf["Author"]]),
 			QuoteText: fmt.Sprint(result[conf["QuoteText"]]),
+			Tags: fmt.Sprint(result[conf["Tags"]]),
+			Category: fmt.Sprint(result["Category"]),
 		}
 
 		_ = dao.Insert(quote)
 
 	}
+	// update
 	return "yay",nil
 }
 
