@@ -22,47 +22,43 @@ func main() {
 
 	// TODO:
 	//  1. move configuration into a file
-	//  2. optimise factory
+	//  2. add logger and handle errors properly
 
 	// folder containing the quotes files
-	quotesFolder := "./quotes"
+	qf := "./quotes"
 
-	var configuration = map[string]map[string]string{}
-	configuration["quotes_v1.json"] = map[string]string{
-		"FILENAME":  quotesFolder + "/quotes_v1.json",
+	var config = map[string]map[string]string{}
+	config["quotes_v1.json"] = map[string]string{
+		"FILENAME":  qf + "/quotes_v1.json",
 		"Author":    "Name",
 		"QuoteText": "Text",
 	}
 
-	configuration["quotes_v2.json"] = map[string]string{
-		"FILENAME":  quotesFolder + "/quotes_v2.json",
+	config["quotes_v2.json"] = map[string]string{
+		"FILENAME":  qf + "/quotes_v2.json",
 		"Author":    "quoteAuthor",
 		"QuoteText": "quoteText",
 	}
 
-	configuration["quotes_v3.json"] = map[string]string{
-		"FILENAME":  quotesFolder + "/quotes_v3.json",
+	config["quotes_v3.json"] = map[string]string{
+		"FILENAME":  qf + "/quotes_v3.json",
 		"Author":    "author",
 		"QuoteText": "en",
 	}
 
-	files, err := ioutil.ReadDir(quotesFolder)
+	files, err := ioutil.ReadDir(qf)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// loop through the files in the folder
 	for _, f := range files {
-		// build filename
-		file := quotesFolder + "/" + f.Name()
-
 		// crate a parser and pass the filename
-		parser, _ := parser.GetParserForFile(map[string]string{
-			"FILENAME": file,
-		})
+		p, _ := parser.GetParserForFile(config[f.Name()])
+
 		// If parser was found for this file, then process it
-		if parser != nil {
-			var res, _ = parser.Process(configuration[f.Name()])
+		if p != nil {
+			var res, _ = p.Process()
 			fmt.Println(res)
 		}
 	}

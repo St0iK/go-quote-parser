@@ -30,12 +30,12 @@ func GetParserForFile(conf map[string]string) (Parser, error) {
 
 	parserName := filepath.Base(conf["FILENAME"])
 
-	parserFactory, ok := parserFactories[parserName]
+	parser, ok := parserFactories[parserName]
 	if !ok {
 
 		return nil, errors.New(fmt.Sprintf("Invalid Datastore name. Must be one of"))
 	}
 
 	// Run the factory with the configuration.
-	return parserFactory(conf)
+	return parser(conf)
 }

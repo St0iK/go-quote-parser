@@ -16,11 +16,11 @@ type JsonParser struct {
 }
 
 // Process
-func (jp *JsonParser) Process(conf map[string]string) (string, error) {
+func (jp *JsonParser) Process() (string, error) {
 	log.Printf("Starting Process")
-	fmt.Printf("%v\n", conf)
+	fmt.Printf("%v\n", jp.conf)
 
-	file, err := os.Open(conf["FILENAME"])
+	file, err := os.Open(jp.conf["FILENAME"])
 
 	// if we os.Open returns an error then handle it
 	if err != nil {
@@ -42,12 +42,13 @@ func (jp *JsonParser) Process(conf map[string]string) (string, error) {
 
 	for key, result := range results {
 		fmt.Println("Reading Value for Key :", key)
-		fmt.Println("Inserting Quote from :", result[conf["Author"]])
-		fmt.Println("Inserting Quote in category :", result[conf["Category"]])
+		fmt.Println("Inserting Quote from :", result[jp.conf["Author"]])
+		fmt.Println("Inserting Quote in category :", result[jp.conf["Category"]])
+
 		quote := model.Quote{
-			Author: fmt.Sprint(result[conf["Author"]]),
-			QuoteText: fmt.Sprint(result[conf["QuoteText"]]),
-			Tags: fmt.Sprint(result[conf["Tags"]]),
+			Author: fmt.Sprint(result[jp.conf["Author"]]),
+			QuoteText: fmt.Sprint(result[jp.conf["QuoteText"]]),
+			Tags: fmt.Sprint(result[jp.conf["Tags"]]),
 			Category: fmt.Sprint(result["Category"]),
 		}
 
