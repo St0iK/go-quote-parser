@@ -3,12 +3,12 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"github.com/St0iK/go-quote-parser/config"
 	"log"
-	"path/filepath"
 )
 
 // ParserFactory ...
-type ParserFactory func(conf map[string]string) (Parser, error)
+type ParserFactory func(conf config.ParserConfig) (Parser, error)
 
 var parserFactories = make(map[string]ParserFactory)
 
@@ -26,13 +26,11 @@ func Register(name string, factory ParserFactory) {
 }
 
 // Get the parser to process the file, and pass configuration
-func GetParserForFile(conf map[string]string) (Parser, error) {
+func GetParserForFile(conf config.ParserConfig) (Parser, error) {
+	log.Printf("Getting Parser for %s type", conf.Type)
 
-	parserName := filepath.Base(conf["FILENAME"])
-
-	parser, ok := parserFactories[parserName]
+	parser, ok := parserFactories[conf.Type]
 	if !ok {
-
 		return nil, errors.New(fmt.Sprintf("Invalid Datastore name. Must be one of"))
 	}
 

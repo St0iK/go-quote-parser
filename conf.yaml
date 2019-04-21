@@ -1,0 +1,16 @@
+QuotesFolder: "./quotes"
+parser_configuration:
+  - Type: "V1"
+    Author: "Name"
+    QuoteText: "Text"
+    File: "./quotes/quotes_v1.json"
+
+  - Type: "V2"
+    Author: "quoteAuthor"
+    QuoteText: "quoteText"
+    File: "./quotes/quotes_v2.json"
+
+  - Type: "V3"
+    Author: "author"
+    QuoteText: "en"
+    File: "./quotes/quotes_v3.json"

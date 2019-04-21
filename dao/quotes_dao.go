@@ -23,7 +23,7 @@ const (
 
 // Connect ...
 func Connect() {
-
+	log.Println("Initialising MongoDB connection")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_DB_URL")))
@@ -44,12 +44,14 @@ func Connect() {
 
 }
 
-func Insert(quote model.Quote) error {
+func Insert(quote model.Quote) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := collection.InsertOne(ctx, bson.M{
 		"author": quote.Author,
 		"quote":  quote.QuoteText,
 	})
 
-	return err
+	if err != nil {
+		log.Fatalf("Error inserting entry into DB %v\n",quote)
+	}
 }
