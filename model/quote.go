@@ -2,7 +2,7 @@ package model
 
 type Quote struct {
 	Author   string
-	QuoteText    string
+	QuoteText string `bson:"quote"`
 	Tags     string
 	Category string
 }
